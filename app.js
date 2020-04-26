@@ -119,17 +119,21 @@ var appController = (function (uiController, financeController) {
     //1. Оруулсан өгөгдлийг дэлгэцнээс олж авах
     //эндээр (+,-),(Тайлбар),(дүн) input дотор хадгална.
     var input = uiController.getInput();
-    //2. Олж авсан өгөгдлийг санхүүгийн контролд дамжуулж тэнд хадгална.
-    var item = financeController.addItem(
-      input.type,
-      input.description,
-      input.value
-    );
-    //3. Олж авсан өгөгдлөө веб дээр тохирох хэсэг дээр хадгална.
-    uiController.addListItem(item, input.type);
-    uiController.clearFields();
-    //4. Төсвийг тооцолно.
-    //5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргана
+
+    //Хоосон байгаа эсэхийг шалгах
+    if (input.description !== "" && input.value !== "") {
+      //2. Олж авсан өгөгдлийг санхүүгийн контролд дамжуулж тэнд хадгална.
+      var item = financeController.addItem(
+        input.type,
+        input.description,
+        input.value
+      );
+      //3. Олж авсан өгөгдлөө веб дээр тохирох хэсэг дээр хадгална.
+      uiController.addListItem(item, input.type);
+      uiController.clearFields();
+      //4. Төсвийг тооцолно.
+      //5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргана
+    }
   };
   var setupListener = function () {
     var DOM = uiController.getDOMstrings();

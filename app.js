@@ -5,6 +5,8 @@ var uiController = (function () {
     inputDescription: ".add__description",
     inputValue: ".add__value",
     addBtn: ".add__btn",
+    incomeList: ".income__list",
+    expenseList: ".expenses__list",
   };
   return {
     getInput: function () {
@@ -14,6 +16,28 @@ var uiController = (function () {
         value: document.querySelector(DOMstrings.inputValue).value,
       };
     },
+    clearFields: function () {
+      var fields = document.querySelectorAll(
+        DOMstrings.inputDescription + "," + DOMstrings.inputValue
+      );
+      //Convert list Array
+
+      var fieldsArr = Array.prototype.slice.call(fields);
+
+      //3 арга
+      fieldsArr.forEach((element) => {
+        element.value = "";
+      });
+      fieldsArr[0].focus();
+      //2 arga
+      // fieldsArr.forEach(function (el, index, array) {
+      //   el.value = "";
+      // });
+      //3/ arga
+      // for (var i = 0; i < fieldsArr.length; i++) {
+      //   fieldsArr[i].value = "";
+      // }
+    },
     getDOMstrings: function () {
       return DOMstrings;
     },
@@ -21,11 +45,11 @@ var uiController = (function () {
       //Орлого зарлагын элементийг агуулсан html-ийг бэлтгэнэ
       var html;
       if (type === "inc") {
-        list = ".income__list";
+        list = DOMstrings.incomeList;
         html =
           '<div class= "item clearfix" id="income-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       } else {
-        list = ".expenses__list";
+        list = DOMstrings.expenseList;
         html =
           '<div class="item clearfix" id="expense-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
@@ -103,6 +127,7 @@ var appController = (function (uiController, financeController) {
     );
     //3. Олж авсан өгөгдлөө веб дээр тохирох хэсэг дээр хадгална.
     uiController.addListItem(item, input.type);
+    uiController.clearFields();
     //4. Төсвийг тооцолно.
     //5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргана
   };

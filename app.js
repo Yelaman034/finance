@@ -78,6 +78,13 @@ var financeController = (function () {
     this.description = description;
     this.value = value;
   };
+  var calculateTotal = function (type) {
+    var sum = 0;
+    data.items[type].forEach(function (el) {
+      sum = sum + el.value;
+    });
+    data.totals[type] = sum;
+  };
   //Орлого зарлагыг нэг сав (data) дээр хийж хадгалах
   var data = {
     items: {
@@ -88,8 +95,31 @@ var financeController = (function () {
       inc: 0,
       exp: 0,
     },
+    tosov: 0,
+    huvi: 0,
   };
   return {
+    tosovTootsooloh: function () {
+      //Нийт зарлагын нийлбэрийг тооцоолно
+      calculateTotal("inc");
+
+      //Нийт орлогын нийлбэрийн тооцоолно
+      calculateTotal("exp");
+
+      //Төсвийг шинээр тооцоолно.
+      data.tosov = data.totals.inc - data.totals.exp;
+
+      //Орлого зарлагын хувийг тооцоолно
+      data.huvi = Math.round((data.totals.exp / data.totals.inc) * 100);
+    },
+    tusuviigAvah: function () {
+      return {
+        tosov: data.tosov,
+        huvi: data.huvi,
+        totalsInc: data.totals.inc,
+        totalsExp: data.totals.exp,
+      };
+    },
     addItem: function (type, dis, val) {
       var item, id;
 
@@ -132,7 +162,11 @@ var appController = (function (uiController, financeController) {
       uiController.addListItem(item, input.type);
       uiController.clearFields();
       //4. Төсвийг тооцолно.
-      //5. Эцсийн үлдэгдэл тооцоог дэлгэцэнд гаргана
+      financeController.tosovTootsooloh();
+      //5. Эцсийн үлдэгдэл
+      var tusuv = financeController.tusuviigAvah();
+      //6. Төсвийг тооцоог дэлгэцэнд гаргана
+      console.log(tusuv);
     }
   };
   var setupListener = function () {

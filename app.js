@@ -7,6 +7,10 @@ var uiController = (function () {
     addBtn: ".add__btn",
     incomeList: ".income__list",
     expenseList: ".expenses__list",
+    tosovLabel: ".budget__value",
+    incomeLabel: ".budget__income--value",
+    expenseLabel: ".budget__expenses--value",
+    precentagLabel: ".budget__expenses--percentage",
   };
   return {
     getInput: function () {
@@ -37,6 +41,26 @@ var uiController = (function () {
       // for (var i = 0; i < fieldsArr.length; i++) {
       //   fieldsArr[i].value = "";
       // }
+    },
+    // {
+    //   tosov: data.tosov,
+    //   huvi: data.huvi,
+    //   totalsInc: data.totals.inc,
+    //   totalsExp: data.totals.exp,
+    // };
+    tusviigUzuuleh: function (tosov) {
+      document.querySelector(DOMstrings.tosovLabel).textContent = tosov.tosov;
+      document.querySelector(DOMstrings.incomeLabel).textContent =
+        tosov.totalsInc;
+      document.querySelector(DOMstrings.expenseLabel).textContent =
+        tosov.totalsExp;
+      if (tosov.huvi !== 0) {
+        document.querySelector(DOMstrings.precentagLabel).textContent =
+          tosov.huvi + "%";
+      } else {
+        document.querySelector(DOMstrings.precentagLabel).textContent =
+          tosov.huvi;
+      }
     },
     getDOMstrings: function () {
       return DOMstrings;
@@ -166,7 +190,7 @@ var appController = (function (uiController, financeController) {
       //5. Эцсийн үлдэгдэл
       var tusuv = financeController.tusuviigAvah();
       //6. Төсвийг тооцоог дэлгэцэнд гаргана
-      console.log(tusuv);
+      uiController.tusviigUzuuleh(tusuv);
     }
   };
   var setupListener = function () {
@@ -184,6 +208,13 @@ var appController = (function (uiController, financeController) {
   return {
     init: function () {
       console.log("App started");
+      uiController.tusviigUzuuleh({
+        tosov: 0,
+        huvi: 0,
+        totalsInc: 0,
+        totalsExp: 0,
+      });
+
       setupListener();
     },
   };

@@ -66,6 +66,10 @@ var uiController = (function () {
     getDOMstrings: function () {
       return DOMstrings;
     },
+    removeListItem: function (id) {
+      var el = document.getElementById(id);
+      el.parentNode.removeChild(el);
+    },
     addListItem: function (item, type) {
       //Орлого зарлагын элементийг агуулсан html-ийг бэлтгэнэ
       var html;
@@ -230,7 +234,7 @@ var appController = (function (uiController, financeController) {
           //1.Санхүүгийн модулиас type,id ашиглаад устгана
           financeController.deleteItem(type, itemId);
           //2.Дэлгэц дээрээс энэ элементийг устгана.
-
+          uiController.removeListItem(id);
           //3.Үлдэгдэл тооцоог шинжилнэ харуулна
         }
       });

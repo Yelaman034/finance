@@ -199,13 +199,17 @@ var appController = (function (uiController, financeController) {
       //3. Олж авсан өгөгдлөө веб дээр тохирох хэсэг дээр хадгална.
       uiController.addListItem(item, input.type);
       uiController.clearFields();
-      //4. Төсвийг тооцолно.
-      financeController.tosovTootsooloh();
-      //5. Эцсийн үлдэгдэл
-      var tusuv = financeController.tusuviigAvah();
-      //6. Төсвийг тооцоог дэлгэцэнд гаргана
-      uiController.tusviigUzuuleh(tusuv);
+      //Төсвийн шинээр тооцоолоод дэлгэцэнд үзүүлнэ.
+      updateTosov();
     }
+  };
+  var updateTosov = function () {
+    //4. Төсвийг тооцолно.
+    financeController.tosovTootsooloh();
+    //5. Эцсийн үлдэгдэл
+    var tusuv = financeController.tusuviigAvah();
+    //6. Төсвийг тооцоог дэлгэцэнд гаргана
+    uiController.tusviigUzuuleh(tusuv);
   };
   var setupListener = function () {
     var DOM = uiController.getDOMstrings();
@@ -236,6 +240,7 @@ var appController = (function (uiController, financeController) {
           //2.Дэлгэц дээрээс энэ элементийг устгана.
           uiController.removeListItem(id);
           //3.Үлдэгдэл тооцоог шинжилнэ харуулна
+          updateTosov();
         }
       });
   };

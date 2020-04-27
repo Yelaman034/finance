@@ -11,6 +11,7 @@ var uiController = (function () {
     incomeLabel: ".budget__income--value",
     expenseLabel: ".budget__expenses--value",
     precentagLabel: ".budget__expenses--percentage",
+    containerDiv: ".container",
   };
   return {
     getInput: function () {
@@ -71,11 +72,11 @@ var uiController = (function () {
       if (type === "inc") {
         list = DOMstrings.incomeList;
         html =
-          '<div class= "item clearfix" id="income-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class= "item clearfix" id="inc-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       } else {
         list = DOMstrings.expenseList;
         html =
-          '<div class="item clearfix" id="expense-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="exp-%id%"><div class="item__description">$DESCRIPTION$</div><div class="right clearfix"><div class="item__value">$VALUE$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
       //Тэр html дотроо орлого зарлагын утгуудыг REPLACE хийж өөрчилж өгнө.
       var html = html.replace("%id%", item.id);
@@ -144,6 +145,15 @@ var financeController = (function () {
         totalsExp: data.totals.exp,
       };
     },
+    deleteItem: function (type, id) {
+      var ids = data.items[type].map(function (el) {
+        return el.id;
+      });
+      var index = ids.indexOf(id);
+      if (index !== -1) {
+        data.items[type].splice(index, 1);
+      }
+    },
     addItem: function (type, dis, val) {
       var item, id;
 
@@ -203,6 +213,27 @@ var appController = (function (uiController, financeController) {
         ctrlAddItem();
       }
     });
+
+    document
+      .querySelector(DOM.containerDiv)
+      .addEventListener("click", function (event) {
+        // console.log(event.target.id);
+        var id = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        // inc-2
+        if (id) {
+          var arr = id.split("-");
+          var type = arr[0];
+          var itemId = parseInt(arr[1]);
+
+          // console.log(type + "===>" + itemId);
+
+          //1.Санхүүгийн модулиас type,id ашиглаад устгана
+          financeController.deleteItem(type, itemId);
+          //2.Дэлгэц дээрээс энэ элементийг устгана.
+
+          //3.Үлдэгдэл тооцоог шинжилнэ харуулна
+        }
+      });
   };
 
   return {

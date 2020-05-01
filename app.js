@@ -13,6 +13,7 @@ var uiController = (function () {
     precentagLabel: ".budget__expenses--percentage",
     containerDiv: ".container",
     expensePercantagesLabel: ".item__percentage",
+    dateLabel: ".budget__title--month",
   };
   var NodeListForEach = function (list, callback) {
     for (var i = 0; i < list.length; i++) {
@@ -20,6 +21,11 @@ var uiController = (function () {
     }
   };
   return {
+    displayDate: function () {
+      var today = new Date();
+      document.querySelector(DOMstrings.dateLabel).textContent =
+        today.getFullYear() + " оны " + today.getMonth() + " сарын ";
+    },
     getInput: function () {
       return {
         type: document.querySelector(DOMstrings.inputType).value,
@@ -292,6 +298,7 @@ var appController = (function (uiController, financeController) {
   return {
     init: function () {
       console.log("App started");
+      uiController.displayDate();
       uiController.tusviigUzuuleh({
         tosov: 0,
         huvi: 0,

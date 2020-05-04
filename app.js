@@ -20,6 +20,32 @@ var uiController = (function () {
       callback(list[i], i);
     }
   };
+  //private function
+  var formatMoney = function (too, type) {
+    too = " " + too;
+    var b = too.split("");
+
+    var c = b.reverse().join("");
+
+    y = "";
+    var count = 1;
+
+    for (var i = 0; i < c.length; i++) {
+      y = y + c[i];
+
+      if (count % 3 === 0) y = y + ",";
+      count++;
+    }
+
+    var d = y.split("").reverse().join("");
+
+    if (d[0] === ",") d = d.substr(1, d.length - 1);
+
+    if (type === "inc") d = "+" + d;
+    else d = "-" + d;
+
+    return d;
+  };
   return {
     displayDate: function () {
       var today = new Date();
@@ -72,11 +98,20 @@ var uiController = (function () {
     //   totalsExp: data.totals.exp,
     // };
     tusviigUzuuleh: function (tosov) {
-      document.querySelector(DOMstrings.tosovLabel).textContent = tosov.tosov;
-      document.querySelector(DOMstrings.incomeLabel).textContent =
-        tosov.totalsInc;
-      document.querySelector(DOMstrings.expenseLabel).textContent =
-        tosov.totalsExp;
+      var type;
+      if (tosov.tosov > 0) type = "inc";
+      else type = "exp";
+      type = document.querySelector(
+        DOMstrings.tosovLabel
+      ).textContent = formatMoney(tosov.tosov, type);
+      document.querySelector(DOMstrings.incomeLabel).textContent = formatMoney(
+        tosov.totalsInc,
+        "inc"
+      );
+      document.querySelector(DOMstrings.expenseLabel).textContent = formatMoney(
+        tosov.totalsExp,
+        "exp"
+      );
       if (tosov.huvi !== 0) {
         document.querySelector(DOMstrings.precentagLabel).textContent =
           tosov.huvi + "%";
@@ -107,7 +142,7 @@ var uiController = (function () {
       //Тэр html дотроо орлого зарлагын утгуудыг REPLACE хийж өөрчилж өгнө.
       var html = html.replace("%id%", item.id);
       var html = html.replace("$DESCRIPTION$", item.description);
-      var html = html.replace("$VALUE$", item.value);
+      var html = html.replace("$VALUE$", formatMoney(item.value, type));
 
       //Бэлтгэсэн html ээ DOM руу хийж өгнө
       document.querySelector(list).insertAdjacentHTML("beforeend", html);
